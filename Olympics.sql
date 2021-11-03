@@ -1,4 +1,5 @@
--- Select all 4 tables to be familiar with them
+-- To work with the data, I've decided to use 4 tables from Olympics Database (scores, performance, judge and judges_aspect)
+-- Let's display them:
 
 SELECT *
 FROM olympics..scores
@@ -14,7 +15,8 @@ FROM olympics..judged_aspect
 LIMIT 5;
 
 
--- basic operations with the performance table
+-- I'd like to organize the data a little bit, perform some basic operations with the performance table
+-- Display olympic results of each national team
 
 SELECT nation, COUNT(name) AS number_applicants, 
                AVG(total_element_score) AS average_score,  
@@ -27,7 +29,7 @@ HAVING MAX(total_component_score) > 30
 ORDER BY number_applicants DESC;
 
 
--- join scores, performance and judged_aspect in one table
+-- Now, I could join scores, performance and judged_aspect tables in one table and look at their relationshps
 
 SELECT * 
 FROM olympics..scores AS s
@@ -36,7 +38,13 @@ INNER JOIN olympics..performance as p ON p.performance_id = ja.performance_id
 ORDER BY 'rank' DESC
 
 
--- look at the winners and country that received the most medals 
+
+
+-- I'd like to sort all ranks or places that each team received and focus only 
+-- on teams who received medals. For this, I will create a subquery and rename 
+-- numeric placements to 'gold','silver' and 'bronze' medals. 
+-- After this, I will combine all medals and display a country that received
+-- the maximum ammount of medals
 
 WITH winners (name,nation,total_segment_score, medals) AS (
   SELECT name, nation,  total_segment_score, CASE WHEN RANK =1 THEN 'gold'
@@ -51,7 +59,8 @@ GROUP BY nation
 ORDER BY count(medals) DESC
 
 
--- Create and save a new table with countries who received medals, run 'drop table if exists' if you want to make any changes to this table
+-- I'd like to created a table with teams who received medals and save it for future useage.
+-- I'm going to run 'drop table if exists' to be able to make any changes to this table later if I need to and avoid errors.
 
 drop table if exists top_teams
 CREATE TABLE top_teams
@@ -63,26 +72,29 @@ CREATE TABLE top_teams
 INSERT INTO top_teams
    SELECT NAME, nation,  total_segment_score, CASE WHEN RANK =1 THEN 'gold'
                                                    WHEN RANK =2 THEN 'silver'
-									               ELSE 'bronse'
-							                  END AS medals
+					           ELSE 'bronse'
+				              END AS medals
      FROM olympics..performance
      WHERE RANK between 1 and 3
 
 
 
--- create a view of top_teams for later use of this table
+-- I'd also like to create a view of this table and use it in my Tableau work later.
+-- I have to Run th 'GO' command to separate this code from other to be able to activate it.
 GO
 Create View teams_medals as
    SELECT NAME, nation,  total_segment_score, CASE WHEN RANK =1 THEN 'gold'
                                                    WHEN RANK =2 THEN 'silver'
-									               ELSE 'bronse'
-							                  END AS medals
+					           ELSE 'bronse'
+					      END AS medals
      FROM olympics..performance
      WHERE RANK between 1 and 3
 GO
 
 
--- Individual scores of each player who received the 1st place and sum of their scores
+
+-- And, finally. I'm going to extract and display individual scores of each player who received the 1st place,
+-- country, program where they participated and scores by each judge.
 
 SELECT p.name, p.nation,p.program, s.judge, sum(s.score) as judge_score
 FROM olympics..performance AS p
