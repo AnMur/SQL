@@ -41,8 +41,8 @@ ORDER BY 'rank' DESC
 WITH winners (name,nation,total_segment_score, medals) AS (
   SELECT name, nation,  total_segment_score, CASE WHEN RANK =1 THEN 'gold'
                                                   WHEN RANK =2 THEN 'silver'
-									              ELSE 'bronse'
-							                 END AS medals
+					          ELSE 'bronse'
+					    END AS medals
      FROM olympics..performance
      WHERE RANK between 1 and 3)
 SELECT nation, sum(total_segment_score) as score , count(medals) as total_medals
@@ -51,7 +51,7 @@ GROUP BY nation
 ORDER BY count(medals) DESC
 
 
--- Create a new table with countries who received medals, run drop table if exists if want to make any changes
+-- Create and save a new table with countries who received medals, run 'drop table if exists' if you want to make any changes to this table
 
 drop table if exists top_teams
 CREATE TABLE top_teams
@@ -70,7 +70,7 @@ INSERT INTO top_teams
 
 
 
--- create view of top_teams for later use of this table
+-- create a view of top_teams for later use of this table
 GO
 Create View teams_medals as
    SELECT NAME, nation,  total_segment_score, CASE WHEN RANK =1 THEN 'gold'
