@@ -13,3 +13,6 @@ I also added comments to my codes on what I did.
 Alghough it is impossible for you to check if this code works, it was tested on my side 
 and I was able to retrieve all needed information.
 
+Also, I wanted to share a link to my Tableau portfolio with last projects:
+[Tableau Projects](https://public.tableau.com/app/profile/andrei.muravev)
+
