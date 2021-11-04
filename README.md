@@ -2,7 +2,7 @@
 
 
 This is my project analyzing the 2018 Olympic Figure Skating Scores with the Structured Query Language. 
-You might click on a Olympic.sql file to open the query.
+Please,  click on a ***Olympics.sql*** file to open the query.
 
 ***Data Sources:***
 - https://github.com/BuzzFeedNews/2018-02-olympic-figure-skating-analysis
